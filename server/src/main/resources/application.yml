@@ -1,0 +1,9 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:db
+    driver-class-name: org.h2.Driver
+    username: kalendar
+  h2:
+    console:
+      enabled: true
+      path: /h2
