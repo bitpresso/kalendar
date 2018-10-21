@@ -1,0 +1,36 @@
+<template>
+  <div class="kalendar-day" :style="style">
+    [{{column}}/{{row}}]
+    {{date.getDate()}}
+  </div>
+</template>
+
+<script>
+export default {
+  name: 'kalendar-day',
+  props: {
+    date: {
+      type: Date,
+      required: true,
+    },
+    index: {
+      type: Number,
+      required: true,
+    },
+  },
+  data() {
+    return {
+      row: Math.floor(this.index / 7) + 1,
+      column: (this.index % 7) + 1,
+    };
+  },
+  computed: {
+    style() {
+      return {
+        'grid-column': this.column,
+        'grid-row': this.row,
+      };
+    },
+  },
+};
+</script>
