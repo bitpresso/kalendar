@@ -1,9 +1,10 @@
 <template>
   <div class="kalendar-monthly-body">
     <kalendar-day v-for="(date, index) in calendar.days"
-      :key="`D${date.toJSON()}`"
+      :key="`D+${date.toJSON()}+${index}`"
       :date="date"
       :index="index"
+      @click="selectDay"
     ></kalendar-day>
   </div>
 </template>
@@ -14,7 +15,7 @@ import Calendar from '../Calendar';
 export default {
   name: 'kalendar-monthly-body',
   props: {
-    value: {
+    selectedDate: {
       type: Date,
       required: true,
     },
@@ -25,10 +26,15 @@ export default {
     };
   },
   watch: {
-    value(newValue) {
-      if (!this.calendar.includes(newValue)) {
-        this.calendar = new Calendar(newValue);
+    selectedDate(newDate, oldDate) {
+      if (oldDate.getMonth() !== newDate.getMonth()) {
+        this.calendar = new Calendar(newDate);
       }
+    },
+  },
+  methods: {
+    selectDay(date) {
+      this.$emit('update:selectedDate', date);
     },
   },
 };

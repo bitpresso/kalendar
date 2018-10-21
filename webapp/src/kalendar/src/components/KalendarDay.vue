@@ -1,7 +1,6 @@
 <template>
-  <div class="kalendar-day" :style="style">
-    [{{column}}/{{row}}]
-    {{date.getDate()}}
+  <div class="kalendar-day" :style="style" @click="click">
+    {{date.getMonth() + 1}}/{{date.getDate()}}
   </div>
 </template>
 
@@ -30,6 +29,11 @@ export default {
         'grid-column': this.column,
         'grid-row': this.row,
       };
+    },
+  },
+  methods: {
+    click() {
+      this.$emit('click', this.date);
     },
   },
 };
