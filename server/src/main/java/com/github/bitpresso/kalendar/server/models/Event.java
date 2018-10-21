@@ -1,7 +1,7 @@
 package com.github.bitpresso.kalendar.server.models;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -15,7 +15,7 @@ import lombok.NonNull;
 @Entity
 @Data
 @NoArgsConstructor
-public class Schedule implements Serializable {
+public class Event implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -29,10 +29,10 @@ public class Schedule implements Serializable {
 	
 	@NotNull
 	@NonNull
-	private LocalDateTime start;
+	private Instant start;
 	
 	@NotNull
 	@NonNull
-	private LocalDateTime end;
+	private Instant end;
 
 }
