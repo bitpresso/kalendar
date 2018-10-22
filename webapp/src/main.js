@@ -2,6 +2,7 @@ import Vue from 'vue';
 import Vuetify from 'vuetify';
 import 'vuetify/dist/vuetify.min.css';
 import Kalendar from './kalendar/src';
+import './kalendar/styles/default.css';
 import App from './App.vue';
 import router from './router';
 import store from './store';

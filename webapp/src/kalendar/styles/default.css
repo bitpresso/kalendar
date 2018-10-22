@@ -1,0 +1,55 @@
+.kalendar-weekly-body {
+  grid-gap: 1px 4px;
+}
+.kalendar-hour {
+  background-color: white;
+  padding: 4px;
+}
+
+.kalendar-monthly-body {
+  grid-gap: 4px;
+}
+
+.kalendar-day {
+  background-color: white;
+  padding: 4px;
+}
+.day0 {
+  color: red;
+  /* background-color: #f8e8e8; */
+}
+.day1 {
+  background-color: #ffffff;
+}
+.day2 {
+  background-color: #ffffff;
+}
+.day3 {
+  background-color: #ffffff;
+}
+.day4 {
+  background-color: #ffffff;
+}
+.day5 {
+  background-color: #ffffff;
+}
+.day6 {
+  color: blue;
+  /* background-color: #e8e8f8; */
+}
+
+.kalendar-event {
+  padding: 4px;
+  background-color: #FFEB3B;
+  font-size: 0.8em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.kalendar-event-date {
+  font-weight: bold;
+  color: #696969;
+}
+.kalendar-event-title {
+  color: #795548;
+}

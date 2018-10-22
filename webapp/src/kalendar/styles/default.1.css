@@ -1,0 +1,39 @@
+
+.kalendar-monthly-body {
+  grid-gap: 4px;
+}
+
+.kalendar-monthly-day {
+  padding: 4px;
+  color: #757575;
+}
+.day0 {
+  color: red;
+  background-color: #f8e8e8;
+}
+.day1 {
+  background-color: #ffffff;
+}
+.day2 {
+  background-color: #ffffff;
+}
+.day3 {
+  background-color: #ffffff;
+}
+.day4 {
+  background-color: #ffffff;
+}
+.day5 {
+  background-color: #ffffff;
+}
+.day6 {
+  color: blue;
+  background-color: #e8e8f8;
+}
+
+.kalendar-month-event {
+  background-color: #5566dd;
+  color: white;
+  padding: 0 4px;
+}
+
