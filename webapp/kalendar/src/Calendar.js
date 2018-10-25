@@ -18,12 +18,12 @@ class Calendar {
     const week = Math.floor(index / 7);
 
     if (this.current.year !== year || this.current.month !== month) {
-      this.monthly = Calendar.generateDays(year, month, firstDate, lastDate);
-      this.weekly = Calendar.generateHours(this.monthly, week);
+      this.monthly = Calendar.generateMonthlyDays(year, month, firstDate, lastDate);
+      this.weekly = Calendar.getWeeklyDays(this.monthly, week);
       this.current.week = week;
     }
     if (this.current.week !== week) {
-      this.weekly = Calendar.generateHours(this.monthly, week);
+      this.weekly = Calendar.getWeeklyDays(this.monthly, week);
       this.current.week = week;
     }
     this.current.year = year;
@@ -40,7 +40,7 @@ class Calendar {
     };
   }
 
-  static generateDays(year, month, firstDate, lastDate) {
+  static generateMonthlyDays(year, month, firstDate, lastDate) {
     const dates = [];
 
     let offset;
@@ -63,6 +63,10 @@ class Calendar {
     }
 
     return dates;
+  }
+
+  static getWeeklyDays(monthlyDays, week) {
+    return monthlyDays.slice(7 * week, 7 * (week + 1));
   }
 
   static generateHours(monthlyDays, week) {

@@ -1,0 +1,47 @@
+
+.kalendar {}
+
+.kalendar-toolbar {
+  background-color: #FFEB3B;
+  height: 48px;
+}
+
+/* .kalendar-content {} */
+
+/* .kalendar-monthly {} */
+.kalendar-monthly-header {
+  height: 32px;
+  text-align: center;
+}
+.kalendar-monthly-content {
+  grid-gap: 4px;
+}
+
+.kalendar-day {
+  background-color: white;
+  padding: 4px;
+}
+
+
+/* .kalendar-weekly {} */
+.kalendar-weekly-header {
+  height: 48px;
+  text-align: center;
+}
+.kalendar-weekly-content {
+  grid-gap: 1px 4px;
+}
+.kalendar-weekly-timeline {
+  grid-gap: 1px 4px;
+  width: 60px;
+  text-align: right;
+  padding-right: 10px;
+}
+.kalendar-weekly-timeline-item {
+  font-size: 0.9em;
+}
+
+.kalendar-hour {
+  background-color: white;
+  padding: 4px;
+}
