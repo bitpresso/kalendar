@@ -14,7 +14,7 @@ class Calendar {
 
     const firstDate = new Date(year, month - 1, 1);
     const lastDate = new Date(year, month, 0);
-    const index = firstDate.getDay() + day;
+    const index = firstDate.getDay() + (day - 1);
     const week = Math.floor(index / 7);
 
     if (this.current.year !== year || this.current.month !== month) {
@@ -59,7 +59,8 @@ class Calendar {
 
     offset = 7 - lastDate.getDay();
     for (let day = 1; day < offset; day += 1, index += 1) {
-      dates[index] = Calendar.haru(year, month + 1, day);
+      const next = new Date(year, month, day);
+      dates[index] = Calendar.haru(next.getFullYear(), next.getMonth() + 1, next.getDate());
     }
 
     return dates;
