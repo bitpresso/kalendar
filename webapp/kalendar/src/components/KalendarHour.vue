@@ -1,5 +1,5 @@
 <template>
-  <div class="kalendar-hour">
+  <div class="kalendar-hour" @click="handleClick">
     {{date.month}}/{{date.day}}
     {{time.hour}}:00
   </div>
@@ -15,6 +15,11 @@ export default {
     time: {
       type: Object,
       required: true,
+    },
+  },
+  methods: {
+    handleClick() {
+      this.$emit('click', this.date);
     },
   },
 };

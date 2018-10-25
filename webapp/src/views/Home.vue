@@ -1,19 +1,24 @@
 <template>
-  <kalendar></kalendar>
-  <!-- <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
-  </div> -->
+  <kalendar v-model="selectedDate" :openDatePicker="openDatePicker"></kalendar>
 </template>
 
 <script>
-// @ is an alias to /src
-// import HelloWorld from '@/components/HelloWorld.vue';
-
 export default {
   name: 'home',
-  // components: {
-  //   HelloWorld,
-  // },
+  data() {
+    return {
+      selectedDate: new Date(2018, 7, 1),
+    };
+  },
+  watch: {
+    selectedDate() {
+      console.log('selectedDate:', this.selectedDate.toLocaleDateString());
+    },
+  },
+  methods: {
+    openDatePicker() {
+      window.alert('date picker');
+    },
+  },
 };
 </script>

@@ -7,8 +7,8 @@
     </div>
     <div class="kalendar-monthly-header"></div>
     <div class="kalendar-monthly-content">
-      <kalendar-day v-for="(date, index) in monthly" :key="`D:${index}`"
-        :date="date"
+      <kalendar-day v-for="(date, index) in dates" :key="`D:${index}`"
+        :date="date" @click="handleClick"
       ></kalendar-day>
     </div>
   </div>
@@ -23,20 +23,20 @@ export default {
     KalendarDay,
   },
   props: {
-    calendar: {
-      type: Object,
+    dates: {
+      type: Array,
       required: true,
-    },
-  },
-  computed: {
-    monthly() {
-      return this.calendar.monthly;
     },
   },
   data() {
     return {
       dayHeader: i18n[navigator.language],
     };
+  },
+  methods: {
+    handleClick(date) {
+      this.$emit('update:current', date);
+    },
   },
 };
 </script>

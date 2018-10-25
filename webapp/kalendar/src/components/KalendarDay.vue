@@ -1,5 +1,5 @@
 <template>
-  <div class="kalendar-day">
+  <div class="kalendar-day" @click="handleClick">
     {{date.month}}/{{date.day}}
   </div>
 </template>
@@ -10,6 +10,11 @@ export default {
     date: {
       type: Object,
       required: true,
+    },
+  },
+  methods: {
+    handleClick() {
+      this.$emit('click', this.date);
     },
   },
 };

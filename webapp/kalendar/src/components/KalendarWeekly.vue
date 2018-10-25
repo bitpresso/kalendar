@@ -1,13 +1,13 @@
 <template>
   <div class="kalendar-weekly">
-    <div class="kalendar-weekly-header-group" style="position: fixed;">
+    <div class="kalendar-weekly-header-group" style="position: fixed; height: 1px;">
       <div class="kalendar-weekly-timeline"></div>
       <div class="kalendar-weekly-header">
         <div v-for="(name, index) in dayHeader" :key="name"
           :class="`day${index}`"
         >
-          {{calendar.weekly[index].day}}
-          {{name}}
+          <div>{{name}}</div>
+          <div>{{dates[index].day}}</div>
         </div>
       </div>
     </div>
@@ -21,26 +21,26 @@
         </div>
       </div>
       <div class="kalendar-weekly-content">
-        <kalendar-hour v-for="(hour, index) in hours" :key="`H:${weekly[0].day}${index}`"
-          :date="weekly[0]" :time="{ hour: index }"
+        <kalendar-hour v-for="(hour, index) in hours" :key="`H:${dates[0].day}:${index}`"
+          :date="dates[0]" :time="{ hour: index }" @click="handleClick"
         ></kalendar-hour>
-        <kalendar-hour v-for="(hour, index) in hours" :key="`H:${weekly[1].day}${index}`"
-          :date="weekly[1]" :time="{ hour: index }"
+        <kalendar-hour v-for="(hour, index) in hours" :key="`H:${dates[1].day}:${index}`"
+          :date="dates[1]" :time="{ hour: index }" @click="handleClick"
         ></kalendar-hour>
-        <kalendar-hour v-for="(hour, index) in hours" :key="`H:${weekly[2].day}${index}`"
-          :date="weekly[2]" :time="{ hour: index }"
+        <kalendar-hour v-for="(hour, index) in hours" :key="`H:${dates[2].day}:${index}`"
+          :date="dates[2]" :time="{ hour: index }" @click="handleClick"
         ></kalendar-hour>
-        <kalendar-hour v-for="(hour, index) in hours" :key="`H:${weekly[3].day}${index}`"
-          :date="weekly[3]" :time="{ hour: index }"
+        <kalendar-hour v-for="(hour, index) in hours" :key="`H:${dates[3].day}:${index}`"
+          :date="dates[3]" :time="{ hour: index }" @click="handleClick"
         ></kalendar-hour>
-        <kalendar-hour v-for="(hour, index) in hours" :key="`H:${weekly[4].day}${index}`"
-          :date="weekly[4]" :time="{ hour: index }"
+        <kalendar-hour v-for="(hour, index) in hours" :key="`H:${dates[4].day}:${index}`"
+          :date="dates[4]" :time="{ hour: index }" @click="handleClick"
         ></kalendar-hour>
-        <kalendar-hour v-for="(hour, index) in hours" :key="`H:${weekly[5].day}${index}`"
-          :date="weekly[5]" :time="{ hour: index }"
+        <kalendar-hour v-for="(hour, index) in hours" :key="`H:${dates[5].day}:${index}`"
+          :date="dates[5]" :time="{ hour: index }" @click="handleClick"
         ></kalendar-hour>
-        <kalendar-hour v-for="(hour, index) in hours" :key="`H:${weekly[6].day}${index}`"
-          :date="weekly[6]" :time="{ hour: index }"
+        <kalendar-hour v-for="(hour, index) in hours" :key="`H:${dates[6].day}:${index}`"
+          :date="dates[6]" :time="{ hour: index }" @click="handleClick"
         ></kalendar-hour>
       </div>
     </div>
@@ -56,14 +56,9 @@ export default {
     KalendarHour,
   },
   props: {
-    calendar: {
-      type: Object,
+    dates: {
+      type: Array,
       required: true,
-    },
-  },
-  computed: {
-    weekly() {
-      return this.calendar.weekly;
     },
   },
   data() {
@@ -71,6 +66,11 @@ export default {
       dayHeader: i18n[navigator.language],
       hours: new Array(24),
     };
+  },
+  methods: {
+    handleClick(date) {
+      this.$emit('update:current', date);
+    },
   },
 };
 </script>
