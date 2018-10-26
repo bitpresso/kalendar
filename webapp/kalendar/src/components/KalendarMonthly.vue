@@ -1,13 +1,13 @@
 <template>
   <div class="kalendar-monthly">
     <div class="kalendar-monthly-header" style="position: fixed;">
-      <div v-for="(name, index) in dayHeader" :key="name" :class="`day${index}`">
+      <div v-for="(name, index) in header" :key="name" :class="`day${index}`">
         {{name}}
       </div>
     </div>
     <div class="kalendar-monthly-header"></div>
     <div class="kalendar-monthly-content">
-      <kalendar-day v-for="(date, index) in dates" :key="`D:${index}`"
+      <kalendar-day v-for="(date, index) in dates" :key="`D:${index}`" :class="`day${index % 7}`"
         :date="date" @click="handleClick"
       ></kalendar-day>
     </div>
@@ -16,7 +16,7 @@
 
 <script>
 import KalendarDay from './KalendarDay.vue';
-import i18n from '../i18n.json';
+import header from '../day-header.json';
 
 export default {
   components: {
@@ -30,12 +30,12 @@ export default {
   },
   data() {
     return {
-      dayHeader: i18n[navigator.language],
+      header: header[navigator.language],
     };
   },
   methods: {
     handleClick(date) {
-      this.$emit('update:current', date);
+      this.$emit('update:calendar', date);
     },
   },
 };

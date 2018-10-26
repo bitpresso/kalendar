@@ -1,93 +1,80 @@
 
 class Calendar {
-  constructor(...args) {
+  constructor(date) {
     this.current = {};
+    this.dates = [];
+    this.monthly = [];
+    this.weekly = [];
 
-    this.update(...args);
+    this.update(date);
   }
 
-  update(...args) {
-    const date = (arguments.length === 0) ? new Date() : new Date(args[0], args[1] - 1, args[2]);
-    const year = date.getFullYear();
-    const month = date.getMonth() + 1;
-    const day = date.getDate();
+  update(date) {
+    const targetDate = date || new Date();
+    if (this.current.date === targetDate) return;
 
-    const firstDate = new Date(year, month - 1, 1);
-    const lastDate = new Date(year, month, 0);
-    const index = firstDate.getDay() + (day - 1);
-    const week = Math.floor(index / 7);
-
-    if (this.current.year !== year || this.current.month !== month) {
-      this.monthly = Calendar.generateMonthlyDays(year, month, firstDate, lastDate);
-      this.weekly = Calendar.getWeeklyDays(this.monthly, week);
-      this.current.week = week;
+    const target = Calendar.resolve(targetDate);
+    if (this.current.year !== target.year || this.current.month !== target.month) {
+      this.dates = Calendar.generate(target);
+      this.monthly = Calendar.getMonthlyDates(this.dates);
+      this.weekly = Calendar.getWeeklyDates(this.dates, target.week);
     }
-    if (this.current.week !== week) {
-      this.weekly = Calendar.getWeeklyDays(this.monthly, week);
-      this.current.week = week;
+    if (this.current.week !== target.week) {
+      this.weekly = Calendar.getWeeklyDates(this.dates, target.week);
     }
-    this.current.year = year;
-    this.current.month = month;
-    this.current.day = day;
+    this.current = target;
   }
 
-  static haru(year, month, day, hour) {
-    return {
-      year,
-      month,
-      day,
-      hour,
-    };
-  }
-
-  static generateMonthlyDays(year, month, firstDate, lastDate) {
+  static generate(target) {
     const dates = [];
 
-    let offset;
+    const begin = 1 - target.first.getDay();
+    const end = target.last.getDate() + (7 - target.last.getDay());
     let index = 0;
-
-    offset = firstDate.getDay() - 1;
-    for (let day = -offset; day <= 0; day += 1, index += 1) {
-      const prev = new Date(year, month - 1, day);
-      dates[index] = Calendar.haru(prev.getFullYear(), prev.getMonth() + 1, prev.getDate());
-    }
-
-    offset = lastDate.getDate();
-    for (let day = 1; day <= offset; day += 1, index += 1) {
-      dates[index] = Calendar.haru(year, month, day);
-    }
-
-    offset = 7 - lastDate.getDay();
-    for (let day = 1; day < offset; day += 1, index += 1) {
-      const next = new Date(year, month, day);
-      dates[index] = Calendar.haru(next.getFullYear(), next.getMonth() + 1, next.getDate());
-    }
-
-    return dates;
-  }
-
-  static getWeeklyDays(monthlyDays, week) {
-    return monthlyDays.slice(7 * week, 7 * (week + 1));
-  }
-
-  static generateHours(monthlyDays, week) {
-    const dates = [];
-
-    let index = 0;
-    const days = monthlyDays.slice(7 * week, (7 * (week + 1)));
-    for (let i = 0; i < 7; i += 1) {
-      const date = days[i];
-      for (let hour = 0; hour < 24; hour += 1, index += 1) {
-        dates[index] = Calendar.haru(date.year, date.month, date.day, hour);
+    for (let day = begin; day < end; day += 1) {
+      const date = new Date(target.year, target.month - 1, day, 0);
+      const times = [date];
+      for (let hour = 1; hour < 24; hour += 1) {
+        times[hour] = new Date(target.year, target.month - 1, day, hour);
       }
-    }
-
-    const numOfWeeks = days.length / 7;
-    for (let i = 0; i < numOfWeeks; i += 1) {
-      dates.push();
+      date.times = times;
+      dates[index] = date;
+      index += 1;
     }
 
     return dates;
+  }
+
+  static resolve(date) {
+    if (date) {
+      const year = date.getFullYear();
+      const month = date.getMonth();
+      const day = date.getDate();
+      const first = new Date(year, month, 1);
+      const last = new Date(year, month + 1, 0);
+      const index = first.getDay() + (day - 1);
+      const week = Math.floor(index / 7);
+
+      return {
+        date,
+        year,
+        month: month + 1,
+        day,
+        first,
+        last,
+        index,
+        week,
+      };
+    }
+    return null;
+  }
+
+  static getMonthlyDates(dates) {
+    return dates;
+  }
+
+  static getWeeklyDates(dates, week) {
+    return dates.slice(7 * week, 7 * (week + 1));
   }
 }
 

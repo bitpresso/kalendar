@@ -17,7 +17,7 @@ export default {
   },
   methods: {
     openDatePicker() {
-      window.alert('date picker');
+      console.log('date picker');
     },
   },
 };

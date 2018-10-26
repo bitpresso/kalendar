@@ -1,7 +1,6 @@
 <template>
   <div class="kalendar-hour" @click="handleClick">
-    {{date.month}}/{{date.day}}
-    {{time.hour}}:00
+    {{label}}
   </div>
 </template>
 
@@ -9,12 +8,13 @@
 export default {
   props: {
     date: {
-      type: Object,
+      type: Date,
       required: true,
     },
-    time: {
-      type: Object,
-      required: true,
+  },
+  computed: {
+    label() {
+      return `${this.date.getMonth() + 1}/${this.date.getDate()} ${this.date.getHours()}:00`;
     },
   },
   methods: {

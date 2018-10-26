@@ -1,6 +1,6 @@
 <template>
   <div class="kalendar-day" @click="handleClick">
-    {{date.month}}/{{date.day}}
+    {{label}}
   </div>
 </template>
 
@@ -8,8 +8,13 @@
 export default {
   props: {
     date: {
-      type: Object,
+      type: Date,
       required: true,
+    },
+  },
+  computed: {
+    label() {
+      return `${this.date.getMonth() + 1}/${this.date.getDate()}`;
     },
   },
   methods: {

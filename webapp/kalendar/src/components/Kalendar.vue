@@ -11,10 +11,16 @@
     <div class="kalendar-toolbar"></div>
     <div class="kalendar-content">
       <div v-if="monthlyView">
-        <kalendar-monthly :dates="calendar.monthly" @update:current="updateCurrent"></kalendar-monthly>
+        <kalendar-monthly
+          :dates="calendar.monthly"
+          @update:calendar="updateCalendar"
+        ></kalendar-monthly>
       </div>
       <div v-else>
-        <kalendar-weekly :dates="calendar.weekly" @update:current="updateCurrent"></kalendar-weekly>
+        <kalendar-weekly
+          :dates="calendar.weekly"
+          @update:calendar="updateCalendar"
+        ></kalendar-weekly>
       </div>
     </div>
   </div>
@@ -37,40 +43,28 @@ export default {
     },
     openDatePicker: {
       type: Function,
-      default: () => window.alert('not found DatePicker'),
+      default: () => console.log('not found DatePicker'),
     },
   },
   data() {
     return {
       monthlyView: true,
-      calendar: new Calendar(),
+      calendar: new Calendar(this.value),
     };
   },
   computed: {
     currentDateString() {
-      const { year, month, day } = this.calendar.current;
-      const date = new Date(year, month - 1, day);
-      return date.toLocaleDateString();
+      return this.calendar.current.date.toLocaleDateString();
     },
   },
   methods: {
     toggleView() {
       this.monthlyView = !this.monthlyView;
     },
-    updateCurrent(current) {
-      const { year, month, day } = current;
-      this.calendar.update(year, month, day);
-      console.log(this.calendar.weekly);
-      this.$emit('input', new Date(year, month - 1, day));
+    updateCalendar(date) {
+      this.calendar.update(date);
+      this.$emit('input', date);
     },
-  },
-  mounted() {
-    if (this.value) {
-      const year = this.value.getFullYear();
-      const month = this.value.getMonth() + 1;
-      const day = this.value.getDate();
-      this.calendar = new Calendar(year, month, day);
-    }
   },
 };
 </script>
