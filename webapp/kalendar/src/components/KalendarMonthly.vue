@@ -18,7 +18,8 @@
           `day${index % 7}`,
           { selected: currentDate === date },
         ]"
-        :date="date" @click="handleClick"
+        :date="date"
+        @click:date="handleClickDate"
       ></kalendar-day>
     </div>
   </div>
@@ -47,8 +48,8 @@ export default {
     };
   },
   methods: {
-    handleClick(date) {
-      this.$emit('update:date', date);
+    handleClickDate(date) {
+      this.$emit('click:date', date);
     },
   },
 };

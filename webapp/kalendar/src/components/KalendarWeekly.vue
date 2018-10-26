@@ -22,25 +22,25 @@
       </div>
       <div class="kalendar-weekly-content">
         <kalendar-hour v-for="(hour, index) in hours" :key="`H:${index}`"
-          :date="dates[0].times[index]" @click="handleClick"
+          :date="dates[0].times[index]" @click:date="handleClickDate"
         ></kalendar-hour>
         <kalendar-hour v-for="(hour, index) in hours" :key="`H:${(24*1)+index}`"
-          :date="dates[1].times[index]" @click="handleClick"
+          :date="dates[1].times[index]" @click:date="handleClickDate"
         ></kalendar-hour>
         <kalendar-hour v-for="(hour, index) in hours" :key="`H:${(24*2)+index}`"
-          :date="dates[2].times[index]" @click="handleClick"
+          :date="dates[2].times[index]" @click:date="handleClickDate"
         ></kalendar-hour>
         <kalendar-hour v-for="(hour, index) in hours" :key="`H:${(24*3)+index}`"
-          :date="dates[3].times[index]" @click="handleClick"
+          :date="dates[3].times[index]" @click:date="handleClickDate"
         ></kalendar-hour>
         <kalendar-hour v-for="(hour, index) in hours" :key="`H:${(24*4)+index}`"
-          :date="dates[4].times[index]" @click="handleClick"
+          :date="dates[4].times[index]" @click:date="handleClickDate"
         ></kalendar-hour>
         <kalendar-hour v-for="(hour, index) in hours" :key="`H:${(24*5)+index}`"
-          :date="dates[5].times[index]" @click="handleClick"
+          :date="dates[5].times[index]" @click:date="handleClickDate"
         ></kalendar-hour>
         <kalendar-hour v-for="(hour, index) in hours" :key="`H:${(24*6)+index}`"
-          :date="dates[6].times[index]" @click="handleClick"
+          :date="dates[6].times[index]" @click:date="handleClickDate"
         ></kalendar-hour>
       </div>
     </div>
@@ -71,8 +71,8 @@ export default {
     };
   },
   methods: {
-    handleClick(date) {
-      this.$emit('update:date', date);
+    handleClickDate(date) {
+      this.$emit('click:date', date);
     },
   },
 };

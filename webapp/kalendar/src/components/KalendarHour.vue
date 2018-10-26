@@ -1,5 +1,5 @@
 <template>
-  <div class="kalendar-hour" @click="handleClick">
+  <div class="kalendar-hour" @click="handleClickDate">
     {{label}}
   </div>
 </template>
@@ -18,8 +18,8 @@ export default {
     },
   },
   methods: {
-    handleClick() {
-      this.$emit('click', this.date);
+    handleClickDate() {
+      this.$emit('click:date', this.date);
     },
   },
 };

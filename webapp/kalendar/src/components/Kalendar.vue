@@ -14,14 +14,14 @@
         <kalendar-monthly
           :currentDate="calendar.current.date"
           :dates="calendar.monthly"
-          @update:date="updateCurrentDate"
+          @click:date="handleClickDate"
         ></kalendar-monthly>
       </div>
       <div v-else>
         <kalendar-weekly
           :currentDate="calendar.current.date"
           :dates="calendar.weekly"
-          @update:date="updateCurrentDate"
+          @click:date="handleClickDate"
         ></kalendar-weekly>
       </div>
     </div>
@@ -72,9 +72,8 @@ export default {
     toggleView() {
       this.monthlyView = !this.monthlyView;
     },
-    updateCurrentDate(date) {
-      this.calendar.update(date);
-      this.$emit('update', date);
+    handleClickDate(date) {
+      this.$emit('click:date', date);
     },
   },
 };

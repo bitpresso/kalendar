@@ -1,6 +1,8 @@
 <template>
   <div>
-    <kalendar v-model="selectedDate" :openDatePicker="openDatePicker"></kalendar>
+    <kalendar v-model="selectedDate" :openDatePicker="openDatePicker"
+      @click:date="createEvent"
+    ></kalendar>
     <v-dialog v-model="datePickerDialog" width="290px">
       <v-date-picker v-model="pickedDateString"
         color="brown" show-current scrollable
@@ -34,6 +36,9 @@ export default {
     },
     closeDatePicker() {
       this.datePickerDialog = false;
+    },
+    createEvent(date) {
+      console.log('TODO: create event:', date);
     },
   },
 };
