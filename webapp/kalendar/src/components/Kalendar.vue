@@ -13,13 +13,13 @@
       <div v-if="monthlyView">
         <kalendar-monthly
           :dates="calendar.monthly"
-          @update:calendar="updateCalendar"
+          @update:date="updateCurrentDate"
         ></kalendar-monthly>
       </div>
       <div v-else>
         <kalendar-weekly
           :dates="calendar.weekly"
-          @update:calendar="updateCalendar"
+          @update:date="updateCurrentDate"
         ></kalendar-weekly>
       </div>
     </div>
@@ -36,8 +36,12 @@ export default {
     KalendarMonthly,
     KalendarWeekly,
   },
+  model: {
+    prop: 'currentDate',
+    event: 'update',
+  },
   props: {
-    value: {
+    currentDate: {
       type: Date,
       default: () => new Date(),
     },
@@ -49,21 +53,26 @@ export default {
   data() {
     return {
       monthlyView: true,
-      calendar: new Calendar(this.value),
+      calendar: new Calendar(this.currentDate),
     };
   },
   computed: {
     currentDateString() {
-      return this.calendar.current.date.toLocaleDateString();
+      return this.currentDate.toLocaleDateString();
+    },
+  },
+  watch: {
+    currentDate(newCurrentDate) {
+      this.updateCurrentDate(newCurrentDate);
     },
   },
   methods: {
     toggleView() {
       this.monthlyView = !this.monthlyView;
     },
-    updateCalendar(date) {
+    updateCurrentDate(date) {
       this.calendar.update(date);
-      this.$emit('input', date);
+      this.$emit('update', date);
     },
   },
 };

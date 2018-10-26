@@ -35,7 +35,7 @@ export default {
   },
   methods: {
     handleClick(date) {
-      this.$emit('update:calendar', date);
+      this.$emit('update:date', date);
     },
   },
 };

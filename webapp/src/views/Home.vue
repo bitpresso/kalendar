@@ -1,5 +1,12 @@
 <template>
-  <kalendar v-model="selectedDate" :openDatePicker="openDatePicker"></kalendar>
+  <div>
+    <kalendar v-model="selectedDate" :openDatePicker="openDatePicker"></kalendar>
+    <v-dialog v-model="datePickerDialog" width="290px">
+      <v-date-picker v-model="pickedDateString"
+        color="brown" show-current scrollable
+      ></v-date-picker>
+    </v-dialog>
+  </div>
 </template>
 
 <script>
@@ -7,17 +14,26 @@ export default {
   name: 'home',
   data() {
     return {
-      selectedDate: new Date(2018, 7, 1),
+      selectedDate: new Date(),
+      datePickerDialog: false,
+      pickedDateString: null,
     };
   },
   watch: {
-    selectedDate() {
-      console.log('selectedDate:', this.selectedDate.toLocaleDateString());
+    selectedDate(newSelectedDate) {
+      console.log('selectedDate:', newSelectedDate.toLocaleDateString());
+      this.closeDatePicker();
+    },
+    pickedDateString(newPickedDateString) {
+      this.selectedDate = new Date(newPickedDateString);
     },
   },
   methods: {
     openDatePicker() {
-      console.log('date picker');
+      this.datePickerDialog = true;
+    },
+    closeDatePicker() {
+      this.datePickerDialog = false;
     },
   },
 };
