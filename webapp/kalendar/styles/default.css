@@ -54,6 +54,9 @@
   height: 32px;
   text-align: center;
 }
+.kalendar-monthly-header-day.selected {
+  background-color: #FFFDE7;
+}
 .kalendar-monthly-content {
   grid-gap: 4px;
 }
@@ -62,12 +65,17 @@
   background-color: white;
   padding: 4px;
 }
-
+.kalendar-day.selected {
+  background-color: #FFFDE7;
+}
 
 /* .kalendar-weekly {} */
 .kalendar-weekly-header {
   height: 48px;
   text-align: center;
+}
+.kalendar-weekly-header-day.selected {
+  background-color: #FFFDE7;
 }
 .kalendar-weekly-content {
   grid-gap: 1px 4px;

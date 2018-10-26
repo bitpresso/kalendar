@@ -12,12 +12,14 @@
     <div class="kalendar-content">
       <div v-if="monthlyView">
         <kalendar-monthly
+          :currentDate="calendar.current.date"
           :dates="calendar.monthly"
           @update:date="updateCurrentDate"
         ></kalendar-monthly>
       </div>
       <div v-else>
         <kalendar-weekly
+          :currentDate="calendar.current.date"
           :dates="calendar.weekly"
           @update:date="updateCurrentDate"
         ></kalendar-weekly>

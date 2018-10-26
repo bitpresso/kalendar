@@ -1,13 +1,23 @@
 <template>
   <div class="kalendar-monthly">
     <div class="kalendar-monthly-header" style="position: fixed;">
-      <div v-for="(name, index) in header" :key="name" :class="`day${index}`">
+      <div class="kalendar-monthly-header-day"
+        v-for="(name, index) in header" :key="name"
+        :class="[
+          `day${index}`,
+          { selected: currentDate.getDay() === index },
+        ]"
+      >
         {{name}}
       </div>
     </div>
     <div class="kalendar-monthly-header"></div>
     <div class="kalendar-monthly-content">
-      <kalendar-day v-for="(date, index) in dates" :key="`D:${index}`" :class="`day${index % 7}`"
+      <kalendar-day v-for="(date, index) in dates" :key="`D:${index}`"
+        :class="[
+          `day${index % 7}`,
+          { selected: currentDate === date },
+        ]"
         :date="date" @click="handleClick"
       ></kalendar-day>
     </div>
@@ -23,6 +33,9 @@ export default {
     KalendarDay,
   },
   props: {
+    currentDate: {
+      type: Date,
+    },
     dates: {
       type: Array,
       required: true,
