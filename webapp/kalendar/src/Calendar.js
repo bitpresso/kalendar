@@ -76,6 +76,40 @@ class Calendar {
   static getWeeklyDates(dates, week) {
     return dates.slice(7 * week, 7 * (week + 1));
   }
+
+  static getOffsetDate(date, offset) {
+    const year = (!offset) ? 0 : offset.year || 0;
+    const month = (!offset) ? 0 : offset.month || 0;
+    const day = (!offset) ? 0 : offset.day || 0;
+    const hour = (!offset) ? 0 : offset.hour || 0;
+    const minute = (!offset) ? 0 : offset.minute || 0;
+    const second = (!offset) ? 0 : offset.second || 0;
+    return new Date(
+      date.getFullYear() + year,
+      date.getMonth() + month,
+      date.getDate() + day,
+      date.getHours() + hour,
+      date.getMinutes() + minute,
+      date.getSeconds() + second,
+    );
+  }
+
+  static getCorrectedDate(date, correct) {
+    const year = (!correct) ? undefined : correct.year;
+    const month = (!correct) ? undefined : correct.month;
+    const day = (!correct) ? undefined : correct.day;
+    const hour = (!correct) ? undefined : correct.hour;
+    const minute = (!correct) ? undefined : correct.minute;
+    const second = (!correct) ? undefined : correct.second;
+    return new Date(
+      (year === undefined) ? date.getFullYear() : year,
+      (month === undefined) ? date.getMonth() : month - 1,
+      (day === undefined) ? date.getDate() : day,
+      (hour === undefined) ? date.getHours() : hour,
+      (minute === undefined) ? date.getMinutes() : minute,
+      (second === undefined) ? date.getSeconds() : second,
+    );
+  }
 }
 
 export default Calendar;

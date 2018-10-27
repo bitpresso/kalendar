@@ -5,6 +5,8 @@
 </template>
 
 <script>
+import Calendar from '../Calendar';
+
 export default {
   props: {
     date: {
@@ -19,7 +21,9 @@ export default {
   },
   methods: {
     handleClickDate() {
-      this.$emit('click:date', this.date);
+      const now = new Date();
+      const date = Calendar.getOffsetDate(this.date, { hour: now.getHours() });
+      this.$emit('click:date', date);
     },
   },
 };
