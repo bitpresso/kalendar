@@ -1,11 +1,14 @@
 <template>
   <div>
-    <kalendar v-model="selectedDate" :openDatePicker="openDatePicker"
+    <kalendar
+      :current-date="selectedDate"
+      @click:date-picker-button="openDatePicker"
       @click:date="createEvent"
     ></kalendar>
     <v-dialog v-model="datePickerDialog" width="290px">
-      <v-date-picker v-model="pickedDateString"
-        color="brown" show-current scrollable
+      <v-date-picker color="brown" show-current scrollable
+        :value="selectedDateString"
+        @input="closeDatePicker"
       ></v-date-picker>
     </v-dialog>
   </div>
@@ -18,26 +21,30 @@ export default {
     return {
       selectedDate: new Date(),
       datePickerDialog: false,
-      pickedDateString: null,
     };
+  },
+  computed: {
+    selectedDateString() {
+      const dateString = this.selectedDate.toLocaleDateString('en-GB');
+      const token = dateString.split('/');
+      return `${token[2]}-${token[1]}-${token[0]}`;
+    },
   },
   watch: {
     selectedDate(newSelectedDate) {
       console.log('selectedDate:', newSelectedDate.toLocaleDateString());
-      this.closeDatePicker();
-    },
-    pickedDateString(newPickedDateString) {
-      this.selectedDate = new Date(newPickedDateString);
     },
   },
   methods: {
     openDatePicker() {
       this.datePickerDialog = true;
     },
-    closeDatePicker() {
+    closeDatePicker(pickedDateString) {
+      this.selectedDate = new Date(pickedDateString);
       this.datePickerDialog = false;
     },
     createEvent(date) {
+      this.selectedDate = date;
       console.log('TODO: create event:', date);
     },
   },

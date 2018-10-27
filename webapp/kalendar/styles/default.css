@@ -55,7 +55,7 @@
   text-align: center;
 }
 .kalendar-monthly-header-day.selected {
-  background-color: #FFFDE7;
+  background-color: rgba(255, 235, 59, 0.1);
 }
 .kalendar-monthly-content {
   grid-gap: 4px;
@@ -66,7 +66,7 @@
   padding: 4px;
 }
 .kalendar-day.selected {
-  background-color: #FFFDE7;
+  background-color: rgba(255, 235, 59, 0.1);
 }
 
 /* .kalendar-weekly {} */
@@ -75,7 +75,7 @@
   text-align: center;
 }
 .kalendar-weekly-header-day.selected {
-  background-color: #FFFDE7;
+  background-color: rgba(255, 235, 59, 0.1);
 }
 .kalendar-weekly-content {
   grid-gap: 1px 4px;

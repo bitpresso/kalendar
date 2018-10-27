@@ -16,7 +16,7 @@
       <kalendar-day v-for="(date, index) in dates" :key="`D:${index}`"
         :class="[
           `day${index % 7}`,
-          { selected: currentDate === date },
+          { selected: isCurrentDate(date) },
         ]"
         :date="date"
         @click:date="handleClickDate"
@@ -48,6 +48,10 @@ export default {
     };
   },
   methods: {
+    isCurrentDate(date) {
+      return this.currentDate.getMonth() === date.getMonth()
+        && this.currentDate.getDate() === date.getDate();
+    },
     handleClickDate(date) {
       this.$emit('click:date', date);
     },

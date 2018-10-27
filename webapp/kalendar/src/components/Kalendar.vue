@@ -2,7 +2,9 @@
   <div class="kalendar">
     <div class="kalendar-toolbar" style="position: fixed;">
       K:alendar
-      <button class="kalendar-date-picker" @click="openDatePicker">{{currentDateString}}</button>
+      <button class="kalendar-date-picker" @click="handleClickDatePickerButton">
+        {{currentDateString}}
+      </button>
       <div class="kalendar-toggle" @click="toggleView">
         <button class="kalendar-toggle-item" :class="{ active: monthlyView }">Monthly</button>
         <button class="kalendar-toggle-item" :class="{ active: !monthlyView }">Weekly</button>
@@ -65,7 +67,7 @@ export default {
   },
   watch: {
     currentDate(newCurrentDate) {
-      this.updateCurrentDate(newCurrentDate);
+      this.calendar.update(newCurrentDate);
     },
   },
   methods: {
@@ -74,6 +76,9 @@ export default {
     },
     handleClickDate(date) {
       this.$emit('click:date', date);
+    },
+    handleClickDatePickerButton() {
+      this.$emit('click:date-picker-button');
     },
   },
 };
