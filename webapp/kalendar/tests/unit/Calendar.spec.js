@@ -64,4 +64,36 @@ describe('Calendar', () => {
     };
     calendarTest(calendar, monthly, weekly);
   });
+
+  it('moveToPrevMonth(new Date(2018, 2, 30))', () => {
+    const calendar = new Calendar(new Date(2018, 2, 30));
+    calendar.moveToPrevMonth();
+    expect(calendar.current.year).toBe(2018);
+    expect(calendar.current.month).toBe(2);
+    expect(calendar.current.day).toBe(28);
+  });
+
+  it('moveToNextMonth(new Date(2018, 0, 31))', () => {
+    const calendar = new Calendar(new Date(2018, 0, 31));
+    calendar.moveToNextMonth();
+    expect(calendar.current.year).toBe(2018);
+    expect(calendar.current.month).toBe(2);
+    expect(calendar.current.day).toBe(28);
+  });
+
+  it('moveToPrevWeek(new Date(2018, 9, 31))', () => {
+    const calendar = new Calendar(new Date(2018, 9, 31));
+    calendar.moveToPrevWeek();
+    expect(calendar.current.year).toBe(2018);
+    expect(calendar.current.month).toBe(10);
+    expect(calendar.current.day).toBe(24);
+  });
+
+  it('moveToNextWeek(new Date(2018, 9, 31))', () => {
+    const calendar = new Calendar(new Date(2018, 9, 31));
+    calendar.moveToNextWeek();
+    expect(calendar.current.year).toBe(2018);
+    expect(calendar.current.month).toBe(11);
+    expect(calendar.current.day).toBe(7);
+  });
 });

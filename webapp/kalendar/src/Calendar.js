@@ -25,6 +25,34 @@ class Calendar {
     this.current = target;
   }
 
+  moveToPrevMonth() {
+    const { year, month, day } = this.current;
+    const lastDayOfPrevMonth = new Date(year, month - 1, 0).getDate();
+    const prevDay = (day < lastDayOfPrevMonth) ? day : lastDayOfPrevMonth;
+    const targetDate = new Date(year, month - 2, prevDay);
+    this.update(targetDate);
+  }
+
+  moveToNextMonth() {
+    const { year, month, day } = this.current;
+    const lastDayOfNextMonth = new Date(year, month + 1, 0).getDate();
+    const nextDay = (day < lastDayOfNextMonth) ? day : lastDayOfNextMonth;
+    const targetDate = new Date(year, month, nextDay);
+    this.update(targetDate);
+  }
+
+  moveToPrevWeek() {
+    const { year, month, day } = this.current;
+    const targetDate = new Date(year, month - 1, day - 7);
+    this.update(targetDate);
+  }
+
+  moveToNextWeek() {
+    const { year, month, day } = this.current;
+    const targetDate = new Date(year, month - 1, day + 7);
+    this.update(targetDate);
+  }
+
   static generate(target) {
     const dates = [];
 
