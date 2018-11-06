@@ -1,91 +1,134 @@
 <template>
-  <div class="kalendar">
-    <div class="kalendar-toolbar" style="position: fixed;">
-      K:alendar
-      <button class="kalendar-date-picker" @click="handleClickDatePickerButton">
-        {{currentDateString}}
-      </button>
-      <div class="kalendar-toggle" @click="toggleView">
-        <button class="kalendar-toggle-item" :class="{ active: monthlyView }">Monthly</button>
-        <button class="kalendar-toggle-item" :class="{ active: !monthlyView }">Weekly</button>
-      </div>
-    </div>
-    <div class="kalendar-toolbar"></div>
-    <div class="kalendar-content">
-      <div v-if="monthlyView">
-        <kalendar-monthly
-          :currentDate="calendar.current.date"
-          :dates="calendar.monthly"
-          @click:date="handleClickDate"
-        ></kalendar-monthly>
-      </div>
-      <div v-else>
-        <kalendar-weekly
-          :currentDate="calendar.current.date"
-          :dates="calendar.weekly"
-          @click:date="handleClickDate"
-        ></kalendar-weekly>
-      </div>
-    </div>
+  <div class="kalendar" v-if="!!calendar">
+    <kalendar-toolbar v-if="toolbar"
+      v-model="currentView"
+      :current-date="calendar.current.date"
+      @click:date="handleClickDate"
+      @click:prev="handleClickPrev"
+      @click:next="handleClickNext"
+    ></kalendar-toolbar>
+    <kalendar-header
+      :current-view="currentView"
+      :current-date="calendar.current.date"
+      :calendar="calendar"
+    >
+      <template slot="header" slot-scope="props">
+        <slot name="header"
+          :current-view="props.currentView"
+          :day="props.day"
+          :date="props.date"
+        ></slot>
+      </template>
+    </kalendar-header>
+    <kalendar-content
+      :current-view="currentView"
+      :current-date="calendar.current.date"
+      :calendar="calendar"
+      @click:datetime="handleClickDatetime"
+    >
+      <template slot="timeline" slot-scope="props">
+        <slot name="timeline"
+          :hour="props.hour"
+        ></slot>
+      </template>
+      <template slot="datetime" slot-scope="props">
+        <slot name="datetime"
+          :current-view="props.currentView"
+          :datetime="props.datetime"
+        ></slot>
+      </template>
+    </kalendar-content>
   </div>
 </template>
 
 <script>
 import Calendar from '../Calendar';
-import KalendarMonthly from './KalendarMonthly.vue';
-import KalendarWeekly from './KalendarWeekly.vue';
+import KalendarToolbar from './KalendarToolbar.vue';
+import KalendarHeader from './KalendarHeader.vue';
+import KalendarContent from './KalendarContent.vue';
 
 export default {
+  name: 'kalendar',
   components: {
-    KalendarMonthly,
-    KalendarWeekly,
-  },
-  model: {
-    prop: 'currentDate',
-    event: 'update',
+    KalendarToolbar,
+    KalendarHeader,
+    KalendarContent,
   },
   props: {
+    toolbar: {
+      type: Boolean,
+      default: () => false,
+    },
+    view: {
+      type: String, // ['monthly' | 'weekly']
+      default: () => 'monthly',
+    },
     currentDate: {
       type: Date,
-      default: () => new Date(),
-    },
-    openDatePicker: {
-      type: Function,
-      default: () => console.log('not found DatePicker'),
+      required: true,
     },
   },
   data() {
     return {
-      monthlyView: true,
-      calendar: new Calendar(this.currentDate),
+      calendar: null,
+      currentView: 'monthly', // ['monthly' | 'weekly']
     };
   },
-  computed: {
-    currentDateString() {
-      return this.currentDate.toLocaleDateString();
+  methods: {
+    handleClickDate() {
+      this.$emit('click:toolbar-date');
+    },
+    handleClickPrev() {
+      this.$emit('click:toolbar-prev');
+      if (this.toolbar) {
+        if (this.currentView === 'weekly') {
+          this.calendar.moveToPrevWeek();
+        } else {
+          this.calendar.moveToPrevMonth();
+        }
+      }
+    },
+    handleClickNext() {
+      this.$emit('click:toolbar-next');
+      if (this.toolbar) {
+        if (this.currentView === 'weekly') {
+          this.calendar.moveToNextWeek();
+        } else {
+          this.calendar.moveToNextMonth();
+        }
+      }
+    },
+    handleClickDatetime(datetime) {
+      this.$emit('click:datetime', datetime);
+    },
+    notifyUpdate() {
+      const dates = this.calendar[this.currentView];
+      const from = dates[0];
+      const to = dates[dates.length - 1];
+      this.$emit('update', {
+        from,
+        to: new Date(to.getFullYear(), to.getMonth(), to.getDate() + 1),
+      });
     },
   },
   watch: {
+    calendar() {
+      console.log('watch:calendar');
+      this.notifyUpdate();
+    },
     currentDate(newCurrentDate) {
+      console.log('watch:currentDate');
       this.calendar.update(newCurrentDate);
+      this.notifyUpdate();
+    },
+    view() {
+      console.log('watch:view');
+      this.notifyUpdate();
+      this.$emit('update:view', this.view);
     },
   },
-  methods: {
-    toggleView() {
-      this.monthlyView = !this.monthlyView;
-    },
-    handleClickDate(date) {
-      this.$emit('click:date', date);
-    },
-    handleClickDatePickerButton() {
-      this.$emit('click:date-picker-button');
-    },
+  mounted() {
+    this.calendar = new Calendar(this.currentDate);
   },
 };
 </script>
-
-<style scoped>
-.kalendar-toolbar {
-  width: 100%;
-}
-</style>

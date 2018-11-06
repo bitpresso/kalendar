@@ -1,11 +1,31 @@
 <template>
-  <div>
+  <v-content>
     <kalendar
+      toolbar
       :current-date="selectedDate"
-      @click:date-picker-button="openDatePicker"
-      @click:date="openEventDialogToCreateEvent"
-    ></kalendar>
-    <v-dialog v-model="datePickerDialog" width="290px">
+      @click:toolbar-date="openDatePicker"
+      @click:datetime="changeSelectedDate"
+    >
+      <template slot="header" slot-scope="props">
+        <span>{{props.day}}</span>
+        <span v-if="props.currentView !== 'monthly'"
+          style="font-size: 1.4em;"
+        >
+          {{props.date.getDate()}}
+        </span>
+      </template>
+      <template slot="timeline" slot-scope="props">
+        {{props.hour}}:00
+      </template>
+      <template slot="datetime" slot-scope="props">
+        <div v-if="props.currentView === 'monthly'">
+          <button @click="openEventDialogToPostEvent(props.datetime)">
+            {{props.datetime.getDate()}}
+          </button>
+        </div>
+      </template>
+    </kalendar>
+    <v-dialog v-model="datePickerDialog.show" width="290px">
       <v-date-picker color="brown" show-current scrollable
         :value="selectedDateString"
         @input="closeDatePicker"
@@ -18,7 +38,7 @@
       @patch:event="patchEvent"
       @delete:event="deleteEvent"
     ></event-dialog>
-  </div>
+  </v-content>
 </template>
 
 <script>
@@ -33,7 +53,9 @@ export default {
   data() {
     return {
       selectedDate: new Date(),
-      datePickerDialog: false,
+      datePickerDialog: {
+        show: false,
+      },
       eventDialog: {
         show: false,
       },
@@ -53,12 +75,15 @@ export default {
     },
   },
   methods: {
+    changeSelectedDate(datetime) {
+      this.selectedDate = datetime;
+    },
     openDatePicker() {
-      this.datePickerDialog = true;
+      this.datePickerDialog.show = true;
     },
     closeDatePicker(pickedDateString) {
       this.selectedDate = new Date(pickedDateString);
-      this.datePickerDialog = false;
+      this.datePickerDialog.show = false;
     },
     openEventDialog(mode, event) {
       this.selectedEvent = event;
@@ -73,10 +98,10 @@ export default {
       };
       this.selectedEvent = null;
     },
-    openEventDialogToCreateEvent(date) {
+    openEventDialogToPostEvent(datetime) {
       this.openEventDialog('post', {
-        start: date,
-        end: Calendar.getOffsetDate(date, { hour: 1 }),
+        start: datetime,
+        end: Calendar.getOffsetDate(datetime, { hour: 1 }),
       });
     },
     postEvent(event) {

@@ -1,94 +1,112 @@
 
-/* .kalendar {} */
+.kalendar {
+  background-color: rgba(190, 190, 190, 0.1);
+}
 
 .kalendar-toolbar {
-  align-items: center;
-  background-color: #FFEB3B;
+  background-color: rgb(255, 235, 59);
   height: 52px;
 }
-
-.kalendar-toggle {
+.kalendar-toolbar .toolbar-date {
+  font-size: 24px;
+  font-weight: bold;
+  margin: 0 20px;
+  width: 240px;
+}
+.kalendar-toolbar .toolbar-button {
+  box-shadow: 0px 3px 1px -2px rgba(0,0,0,0.2), 0px 2px 2px 0px rgba(0,0,0,0.14), 0px 1px 5px 0px rgba(0,0,0,0.12);
+  background-color: rgb(121, 85, 72);
+  color: rgba(255, 255, 255, 1);
+  font-size: 18px;
+  font-weight: bold;
+  width: 40px;
+  height: 40px;
+}
+.kalendar-toolbar .toolbar-button.round {
+  border-radius: 50%;
+}
+.kalendar-toolbar .toolbar-toggle {
   display: inline;
   align-items: center;
+  margin: 0 10px;
 }
-.kalendar-toggle-item {
-  color: white;
-  background-color: #D7CCC8;
-  min-width: 88px;
+.kalendar-toolbar .toolbar-toggle-item {
+  min-width: 80px;
   height: 36px;
-  margin-top: 8px;
-  margin-bottom: 8px;
+  font-weight: bold;
+  color: rgba(0, 0, 0, 0.2);
   box-shadow: inset 0px 3px 1px -2px rgba(0,0,0,0.2), inset 0px 2px 2px 0px rgba(0,0,0,0.14), 0px 1px 5px 0px rgba(0,0,0,0.12);
 }
-.kalendar-toggle-item:first-child {
-  margin-left: 6px;
-  border-top-left-radius: 2px;
-  border-top-left-radius: 2px;
+.kalendar-toolbar .toolbar-toggle-item:first-child {
+  border-top-left-radius: 4px;
+  border-bottom-left-radius: 4px;
 }
-.kalendar-toggle-item:last-child {
-  margin-right: 6px;
-  border-top-right-radius: 2px;
-  border-top-right-radius: 2px;
+.kalendar-toolbar .toolbar-toggle-item:last-child {
+  border-top-right-radius: 4px;
+  border-bottom-right-radius: 4px;
 }
-.kalendar-toggle-item.active {
-  color: white;
-  background-color: #795548;
+.kalendar-toolbar .toolbar-toggle-item.active {
+  background-color: rgb(121, 85, 72);
+  color: rgba(255, 255, 255, 0.8);;
   box-shadow: 0px 3px 1px -2px rgba(0,0,0,0.2), 0px 2px 2px 0px rgba(0,0,0,0.14), 0px 1px 5px 0px rgba(0,0,0,0.12);
 }
 
-.kalendar-date-picker {
-  align-items: center;
-  min-width: 120px;
-  height: 36px;
-  margin-top: 8px;
-  margin-bottom: 8px;
-  color: white;
-  background-color: #795548;
-  box-shadow: 0px 3px 1px -2px rgba(0,0,0,0.2), 0px 2px 2px 0px rgba(0,0,0,0.14), 0px 1px 5px 0px rgba(0,0,0,0.12);
+.kalendar-header {
+  /* background-color: rgba(255, 255, 255, 0.6); */
+  background-color: rgba(255, 235, 59, 0.6);
 }
-
-/* .kalendar-content {} */
-
-/* .kalendar-monthly {} */
-.kalendar-monthly-header {
-  height: 32px;
-  text-align: center;
+.kalendar-header.monthly {
+  height: 2em;
 }
-.kalendar-monthly-header-day.selected {
-  background-color: rgba(255, 235, 59, 0.1);
+.kalendar-header.weekly {
+  height: 3em;
 }
-.kalendar-monthly-content {
+.kalendar-header .header-datetime {
+  grid-gap: 0 4px;
+}
+.kalendar-content .content-datetime.monthly {
   grid-gap: 4px;
 }
+.kalendar-content .content-datetime.weekly,
+.kalendar-timeline {
+  grid-gap: 1px 4px;
+}
+.kalendar-timeline {
+  width: 60px;  
+}
 
-.kalendar-day {
-  background-color: white;
+.header-datetime-area {
   padding: 4px;
-}
-.kalendar-day.selected {
-  background-color: rgba(255, 235, 59, 0.1);
-}
-
-/* .kalendar-weekly {} */
-.kalendar-weekly-header {
-  height: 48px;
   text-align: center;
 }
-.kalendar-weekly-header-day.selected {
-  background-color: rgba(255, 235, 59, 0.1);
-}
-.kalendar-weekly-content {
-  grid-gap: 1px 4px;
-}
-.kalendar-weekly-timeline {
-  grid-gap: 1px 4px;
-  width: 60px;
-  padding-right: 10px;
-  text-align: right;
-  font-size: 0.9em;
-}
-
-.kalendar-hour {
+.content-datetime-area {
   background-color: white;
   padding: 4px;
+}
+.content-datetime-area.monthly {
+  min-height: 120px;
+}
+.content-datetime-area.weekly {
+  min-height: 50px;
+}
+.content-datetime-area.deviated {
+  background-color: rgba(180, 180, 180, 0.1);
+  color: lightgray;
+}
+.content-datetime-area.selected {
+  background-color: rgba(255, 235, 59, 0.1);
+  font-weight: bold;
+}
+.header-datetime-area.day0,
+.content-datetime-area.day0 {
+  color: red;
+}
+.header-datetime-area.day6,
+.content-datetime-area.day6 {
+  color: blue;
+}
+.content-timeline-area {
+  padding-right: 10px;
+  font-size: 0.8em;
+  text-align: right;
 }
