@@ -1,15 +1,15 @@
 <template>
   <div class="kalendar" v-if="!!calendar">
-    <kalendar-toolbar v-if="toolbar"
+    <kalendar-toolbar v-if="options.toolbar"
       v-model="currentView"
-      :current-date="calendar.current.date"
+      :current-date="currentDate"
       @click:date="handleClickDate"
       @click:prev="handleClickPrev"
       @click:next="handleClickNext"
     ></kalendar-toolbar>
     <kalendar-header
       :current-view="currentView"
-      :current-date="calendar.current.date"
+      :current-date="currentDate"
       :calendar="calendar"
     >
       <template slot="header" slot-scope="props">
@@ -21,10 +21,13 @@
       </template>
     </kalendar-header>
     <kalendar-content
+      :options="options"
       :current-view="currentView"
-      :current-date="calendar.current.date"
+      :current-date="currentDate"
       :calendar="calendar"
+      :events="events"
       @click:datetime="handleClickDatetime"
+      @click:event="handleClickEvent"
     >
       <template slot="timeline" slot-scope="props">
         <slot name="timeline"
@@ -54,10 +57,24 @@ export default {
     KalendarHeader,
     KalendarContent,
   },
+  model: {
+    prop: 'current-date',
+    event: 'update:current-date',
+  },
   props: {
-    toolbar: {
-      type: Boolean,
-      default: () => false,
+    options: {
+      type: Object,
+      default: () => ({
+        toolbar: false,
+        event: {
+          label: {
+            id: 'href',
+            title: 'title',
+            from: 'from',
+            to: 'to',
+          },
+        },
+      }),
     },
     view: {
       type: String, // ['monthly' | 'weekly']
@@ -66,6 +83,10 @@ export default {
     currentDate: {
       type: Date,
       required: true,
+    },
+    events: {
+      type: Array,
+      default: () => [],
     },
   },
   data() {
@@ -80,50 +101,50 @@ export default {
     },
     handleClickPrev() {
       this.$emit('click:toolbar-prev');
-      if (this.toolbar) {
+      if (this.options.toolbar) {
         if (this.currentView === 'weekly') {
-          this.calendar.moveToPrevWeek();
+          this.updateCurrentDate(Calendar.moveToPrevWeek(this.currentDate));
         } else {
-          this.calendar.moveToPrevMonth();
+          this.updateCurrentDate(Calendar.moveToPrevMonth(this.currentDate));
         }
       }
     },
     handleClickNext() {
       this.$emit('click:toolbar-next');
-      if (this.toolbar) {
+      if (this.options.toolbar) {
         if (this.currentView === 'weekly') {
-          this.calendar.moveToNextWeek();
+          this.updateCurrentDate(Calendar.moveToNextWeek(this.currentDate));
         } else {
-          this.calendar.moveToNextMonth();
+          this.updateCurrentDate(Calendar.moveToNextMonth(this.currentDate));
         }
       }
     },
     handleClickDatetime(datetime) {
-      this.$emit('click:datetime', datetime);
+      this.$emit('click:datetime', datetime, this.currentView);
     },
-    notifyUpdate() {
+    handleClickEvent(event) {
+      this.$emit('click:event', event);
+    },
+    updateCurrentDate(date) {
+      this.$emit('update:current-date', date);
+    },
+    updateRange() {
       const dates = this.calendar[this.currentView];
       const from = dates[0];
-      const to = dates[dates.length - 1];
-      this.$emit('update', {
-        from,
-        to: new Date(to.getFullYear(), to.getMonth(), to.getDate() + 1),
-      });
+      const to = Calendar.getOffsetDate(dates[dates.length - 1], { day: 1 });
+      this.$emit('update:range', from, to);
     },
   },
   watch: {
     calendar() {
-      console.log('watch:calendar');
-      this.notifyUpdate();
+      this.updateRange();
     },
     currentDate(newCurrentDate) {
-      console.log('watch:currentDate');
       this.calendar.update(newCurrentDate);
-      this.notifyUpdate();
+      this.updateRange();
     },
-    view() {
-      console.log('watch:view');
-      this.notifyUpdate();
+    currentView() {
+      this.updateRange();
       this.$emit('update:view', this.view);
     },
   },

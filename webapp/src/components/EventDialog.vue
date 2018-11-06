@@ -1,34 +1,34 @@
 <template>
-  <v-dialog v-model="value" width="480px" persistent>
+  <v-dialog v-if="event" v-model="value" width="480px" persistent>
     <v-card>
       <v-card-title class="headline">{{headline}}</v-card-title>
       <div style="padding: 20px;">
         <v-form v-model="valid">
-          <v-text-field outline label="Title"
+          <v-text-field outline background-color="brown" label="Title"
             v-model="event.title"
             :rules="titleRules" required
           ></v-text-field>
-          <datetime-picker label="Start"
+          <datetime-picker background-color="brown" label="Start"
             v-model="event.start"
           ></datetime-picker>
-          <datetime-picker label="End"
+          <datetime-picker background-color="brown" label="End"
             v-model="event.end"
             :error-message="rangeErrorMessage"
           ></datetime-picker>
         </v-form>
       </div>
       <v-card-actions>
-        <v-btn color="brown" flat
-          @click="() => $emit('input', false)"
-        >Cancel</v-btn>
-        <v-btn color="red"
+        <v-btn color="red" flat
           v-if="mode === 'patch'"
-          @click="() => $emit(`${mode}:event`, event)"
-        >Cancel</v-btn>
+          @click="handleClickDelete"
+        >Delete</v-btn>
         <v-spacer></v-spacer>
+        <v-btn flat
+          @click="handleClickCancel"
+        >Cancel</v-btn>
         <v-btn color="yellow" :disabled="!(isValidRange && valid)"
-          @click="() => $emit(`${mode}:event`, event)"
-        >OK</v-btn>
+          @click="handleClickSave"
+        >Save</v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -49,7 +49,6 @@ export default {
     mode: String,
     event: {
       type: Object,
-      required: true,
     },
   },
   data() {
@@ -67,8 +66,6 @@ export default {
           return 'Create Event';
         case 'patch':
           return 'Modify Event';
-        case 'delete':
-          return 'Delete Event';
         default:
           return 'Event';
       }
@@ -82,12 +79,20 @@ export default {
         : 'End date must be later than start date';
     },
   },
-  watch: {
-    ['event.start']() {
-      console.log(this.event.start);
+  methods: {
+    closeDialog() {
+      this.$emit('input', false);
     },
-    ['event.end']() {
-      console.log(this.event.end);
+    handleClickCancel() {
+      this.closeDialog();
+    },
+    handleClickSave() {
+      this.$emit(`${this.mode}:event`, this.event);
+      this.closeDialog();
+    },
+    handleClickDelete() {
+      this.$emit('delete:event', this.event);
+      this.closeDialog();
     },
   },
 };

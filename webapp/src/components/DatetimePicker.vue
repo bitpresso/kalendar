@@ -1,34 +1,39 @@
 <template>
   <v-input :error-messages="errorMessage">
-    <v-select outline :hide-details="true" label="Year"
+    <v-select outline :background-color="backgroundColor" :hide-details="true"
+      label="Year"
       :items="yearItems"
       :value="date.getFullYear()"
       @input="year => {
         $emit('update', getCorrectedDate(date, { year }));
       }"
     ></v-select>
-    <v-select outline :hide-details="true" label="Month"
+    <v-select outline :background-color="backgroundColor" :hide-details="true"
+      label="Month"
       :items="monthItems"
       :value="date.getMonth() + 1"
       @input="month => {
         $emit('update', getCorrectedDate(date, { month }));
       }"
     ></v-select>
-    <v-select outline :hide-details="true" label="Day"
+    <v-select outline :background-color="backgroundColor" :hide-details="true"
+      label="Day"
       :items="dayItems"
       :value="date.getDate()"
       @input="day => {
         $emit('update', getCorrectedDate(date, { day }));
       }"
     ></v-select>
-    <v-select outline :hide-details="true" label="Hour"
+    <v-select outline :background-color="backgroundColor" :hide-details="true"
+      label="Hour"
       :items="hourItems"
       :value="date.getHours()"
       @input="hour => {
         $emit('update', getCorrectedDate(date, { hour }));
       }"
     ></v-select>
-    <v-select outline :hide-details="true" label="Minute"
+    <v-select outline :background-color="backgroundColor" :hide-details="true"
+      label="Minute"
       :items="[ '00' ]"
       :value="'00'"
     ></v-select>
@@ -44,6 +49,7 @@ export default {
     event: 'update',
   },
   props: {
+    backgroundColor: String,
     label: String,
     date: {
       type: Date,

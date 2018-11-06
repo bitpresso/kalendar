@@ -75,6 +75,12 @@
   width: 60px;  
 }
 
+.content-timeline-area {
+  padding-right: 10px;
+  font-size: 0.8em;
+  text-align: right;
+}
+
 .header-datetime-area {
   padding: 4px;
   text-align: center;
@@ -83,19 +89,20 @@
   background-color: white;
   padding: 4px;
 }
-.content-datetime-area.monthly {
-  min-height: 120px;
-}
 .content-datetime-area.weekly {
   min-height: 50px;
 }
-.content-datetime-area.deviated {
+.content-datetime-area.monthly {
+  min-height: 120px;
+}
+.content-datetime-area.monthly.deviated {
   background-color: rgba(180, 180, 180, 0.1);
   color: lightgray;
 }
-.content-datetime-area.selected {
-  background-color: rgba(255, 235, 59, 0.1);
-  font-weight: bold;
+.content-datetime-area.monthly.selected {
+  /* border: 1px solid rgba(255, 235, 59); */
+  box-shadow: 2px 2px 1px -1px rgba(255, 235, 59), -2px -2px 1px -1px rgba(255, 235, 59);
+  /* font-weight: bold; */
 }
 .header-datetime-area.day0,
 .content-datetime-area.day0 {
@@ -105,8 +112,36 @@
 .content-datetime-area.day6 {
   color: blue;
 }
-.content-timeline-area {
-  padding-right: 10px;
-  font-size: 0.8em;
+
+.kalendar-event {
+  cursor: pointer;
+}
+.kalendar-event.monthly {
+  background-color: rgba(121, 85, 72, 0.8);
+  border-radius: 4px;
+  border: 1px solid rgb(121, 85, 72);
+  color: white;
+  margin: 4px 0;
+}
+.kalendar-event.monthly .kalendar-event-time {
+  font-size: 0.9em;
   text-align: right;
+  padding-right: 8px;
+  width: 3.4em;
+}
+.kalendar-event.monthly .kalendar-event-title {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.kalendar-event.weekly {
+  background-color: rgba(121, 85, 72, 0.8);
+  border-radius: 4px;
+  border: 1px solid rgb(121, 85, 72);
+  color: white;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  margin: 2px 8px;
+  padding: 4px 8px;
 }

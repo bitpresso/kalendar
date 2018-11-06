@@ -3,6 +3,7 @@ class Calendar {
   constructor(date) {
     this.current = {};
     this.dates = [];
+    this.indexes = {};
     this.monthly = [];
     this.weekly = [];
 
@@ -15,7 +16,7 @@ class Calendar {
 
     const target = Calendar.resolve(targetDate);
     if (this.current.year !== target.year || this.current.month !== target.month) {
-      this.dates = Calendar.generate(target);
+      this.generate(target);
       this.monthly = Calendar.getMonthlyDates(this.dates);
       this.weekly = Calendar.getWeeklyDates(this.dates, target.week);
     }
@@ -25,52 +26,19 @@ class Calendar {
     this.current = target;
   }
 
-  moveToPrevMonth() {
-    const { year, month, day } = this.current;
-    const lastDayOfPrevMonth = new Date(year, month - 1, 0).getDate();
-    const prevDay = (day < lastDayOfPrevMonth) ? day : lastDayOfPrevMonth;
-    const targetDate = new Date(year, month - 2, prevDay);
-    this.update(targetDate);
-  }
-
-  moveToNextMonth() {
-    const { year, month, day } = this.current;
-    const lastDayOfNextMonth = new Date(year, month + 1, 0).getDate();
-    const nextDay = (day < lastDayOfNextMonth) ? day : lastDayOfNextMonth;
-    const targetDate = new Date(year, month, nextDay);
-    this.update(targetDate);
-  }
-
-  moveToPrevWeek() {
-    const { year, month, day } = this.current;
-    const targetDate = new Date(year, month - 1, day - 7);
-    this.update(targetDate);
-  }
-
-  moveToNextWeek() {
-    const { year, month, day } = this.current;
-    const targetDate = new Date(year, month - 1, day + 7);
-    this.update(targetDate);
-  }
-
-  static generate(target) {
-    const dates = [];
-
+  generate(target) {
     const begin = 1 - target.first.getDay();
     const end = target.last.getDate() + (7 - target.last.getDay());
     let index = 0;
+
+    this.dates = [];
+    this.indexes = {};
     for (let day = begin; day < end; day += 1) {
       const date = new Date(target.year, target.month - 1, day, 0);
-      const times = [date];
-      for (let hour = 1; hour < 24; hour += 1) {
-        times[hour] = new Date(target.year, target.month - 1, day, hour);
-      }
-      date.times = times;
-      dates[index] = date;
+      this.dates[index] = date;
+      this.indexes[date.toDateString()] = index;
       index += 1;
     }
-
-    return dates;
   }
 
   static resolve(date) {
@@ -137,6 +105,32 @@ class Calendar {
       (minute === undefined) ? date.getMinutes() : minute,
       (second === undefined) ? date.getSeconds() : second,
     );
+  }
+
+  static moveToPrevMonth(date) {
+    const year = date.getFullYear();
+    const month = date.getMonth();
+    const day = date.getDate();
+    const lastDayOfPrevMonth = new Date(year, month, 0).getDate();
+    const prevDay = (day < lastDayOfPrevMonth) ? day : lastDayOfPrevMonth;
+    return new Date(year, month - 1, prevDay);
+  }
+
+  static moveToNextMonth(date) {
+    const year = date.getFullYear();
+    const month = date.getMonth();
+    const day = date.getDate();
+    const lastDayOfNextMonth = new Date(year, month + 2, 0).getDate();
+    const nextDay = (day < lastDayOfNextMonth) ? day : lastDayOfNextMonth;
+    return new Date(year, month + 1, nextDay);
+  }
+
+  static moveToPrevWeek(date) {
+    return new Date(date.getFullYear(), date.getMonth(), date.getDate() - 7);
+  }
+
+  static moveToNextWeek(date) {
+    return new Date(date.getFullYear(), date.getMonth(), date.getDate() + 7);
   }
 }
 

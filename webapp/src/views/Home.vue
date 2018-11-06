@@ -1,10 +1,13 @@
 <template>
   <v-content>
     <kalendar
-      toolbar
-      :current-date="selectedDate"
+      v-model="selectedDate"
+      :options="options"
+      :events="events"
       @click:toolbar-date="openDatePicker"
-      @click:datetime="changeSelectedDate"
+      @click:datetime="openEventDialogToPostEvent"
+      @click:event="openEventDialogToPatchEvent"
+      @update:range="updateRange"
     >
       <template slot="header" slot-scope="props">
         <span>{{props.day}}</span>
@@ -19,7 +22,7 @@
       </template>
       <template slot="datetime" slot-scope="props">
         <div v-if="props.currentView === 'monthly'">
-          <button @click="openEventDialogToPostEvent(props.datetime)">
+          <button @click.stop="changeSelectedDate(props.datetime)">
             {{props.datetime.getDate()}}
           </button>
         </div>
@@ -31,9 +34,9 @@
         @input="closeDatePicker"
       ></v-date-picker>
     </v-dialog>
-    <event-dialog v-if="selectedEvent" v-model="eventDialog.show"
+    <event-dialog v-model="eventDialog.show"
       :mode="eventDialog.mode"
-      :event="selectedEvent"
+      :event="eventDialog.event"
       @post:event="postEvent"
       @patch:event="patchEvent"
       @delete:event="deleteEvent"
@@ -60,6 +63,18 @@ export default {
         show: false,
       },
       selectedEvent: null,
+      events: [],
+      options: {
+        toolbar: true,
+        event: {
+          label: {
+            id: 'href',
+            title: 'title',
+            from: 'start',
+            to: 'end',
+          },
+        },
+      },
     };
   },
   computed: {
@@ -67,11 +82,6 @@ export default {
       const dateString = this.selectedDate.toLocaleDateString('en-GB');
       const token = dateString.split('/');
       return `${token[2]}-${token[1]}-${token[0]}`;
-    },
-  },
-  watch: {
-    selectedDate(newSelectedDate) {
-      console.log('selectedDate:', newSelectedDate.toLocaleDateString());
     },
   },
   methods: {
@@ -85,33 +95,59 @@ export default {
       this.selectedDate = new Date(pickedDateString);
       this.datePickerDialog.show = false;
     },
+    updateRange(start, end) {
+      this.range = {
+        start,
+        end,
+      };
+      this.loadEvents();
+    },
     openEventDialog(mode, event) {
-      this.selectedEvent = event;
       this.eventDialog = {
         show: true,
         mode,
+        event,
       };
     },
-    closeEventDialog() {
-      this.eventDialog = {
-        show: false,
-      };
-      this.selectedEvent = null;
-    },
-    openEventDialogToPostEvent(datetime) {
+    openEventDialogToPostEvent(datetime, view) {
+      const start = (view !== 'monthly')
+        ? datetime
+        : Calendar.getCorrectedDate(datetime, { hour: new Date().getHours() });
       this.openEventDialog('post', {
-        start: datetime,
-        end: Calendar.getOffsetDate(datetime, { hour: 1 }),
+        start,
+        end: Calendar.getOffsetDate(start, { hour: 1 }),
+      });
+    },
+    openEventDialogToPatchEvent(event) {
+      this.openEventDialog('patch', event);
+    },
+    loadEvents() {
+      this.$service.event.getEventsByRange(this.range.start, this.range.end).then((results) => {
+        this.events = results;
+      }).catch((error) => {
+        console.error(error);
       });
     },
     postEvent(event) {
-      console.log('post:', event);
+      this.$service.event.postEvent(event).then(() => {
+        this.loadEvents();
+      }).catch((error) => {
+        console.error(error);
+      });
     },
     patchEvent(event) {
-      console.log('patch:', event);
+      this.$service.event.patchEvent(event).then(() => {
+        this.loadEvents();
+      }).catch((error) => {
+        console.error(error);
+      });
     },
     deleteEvent(event) {
-      console.log('delete:', event);
+      this.$service.event.deleteEvent(event).then(() => {
+        this.loadEvents();
+      }).catch((error) => {
+        console.error(error);
+      });
     },
   },
 };
