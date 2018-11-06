@@ -28,6 +28,7 @@
       :events="events"
       @click:datetime="handleClickDatetime"
       @click:event="handleClickEvent"
+      @update:event="updateEvent"
     >
       <template slot="timeline" slot-scope="props">
         <slot name="timeline"
@@ -127,6 +128,9 @@ export default {
     },
     updateCurrentDate(date) {
       this.$emit('update:current-date', date);
+    },
+    updateEvent(event) {
+      this.$emit('update:event', event);
     },
     updateRange() {
       const dates = this.calendar[this.currentView];

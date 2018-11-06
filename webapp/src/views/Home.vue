@@ -7,6 +7,7 @@
       @click:toolbar-date="openDatePicker"
       @click:datetime="openEventDialogToPostEvent"
       @click:event="openEventDialogToPatchEvent"
+      @update:event="patchEvent"
       @update:range="updateRange"
     >
       <template slot="header" slot-scope="props">

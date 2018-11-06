@@ -15,6 +15,8 @@
         :class="getDatetimeClass(datetime)"
         :style="getDatetimeStyle(index)"
         @click.stop="handleClickDatetime(datetime)"
+        @dragover.prevent="handleDragOver"
+        @drop.prevent="handleDrop($event, datetime)"
       >
         <slot name="datetime"
           :current-view="currentView"
@@ -24,6 +26,8 @@
           v-for="event in monthlyEvents[index]" :key="getMonthlyEventKey(event, index)"
           :class="[ 'kalendar-event', currentView ]"
           @click.stop="handleClickEvent(event)"
+          draggable="true"
+          @dragstart="handleDragStart($event, event)"
         >
           <div class="kalendar-event-time">{{event[options.event.label.from].getHours()}}:00</div>
           <div class="kalendar-event-title">{{event[options.event.label.title]}}</div>
@@ -34,6 +38,8 @@
         :class="[ 'kalendar-event', currentView ]"
         :style="getEventStyle(event)"
         @click.stop="handleClickEvent(event)"
+        draggable="true"
+        @dragstart="handleDragStart($event, event)"
       >
         {{event[options.event.label.title]}}
       </div>
@@ -42,6 +48,8 @@
 </template>
 
 <script>
+import Calendar from '../Calendar';
+
 export default {
   props: {
     options: {
@@ -148,6 +156,29 @@ export default {
     },
     handleClickEvent(event) {
       this.$emit('click:event', event);
+    },
+    handleDragStart($event, event) {
+      $event.dataTransfer.setData('kalendar/event', JSON.stringify(event));
+    },
+    handleDragOver($event) {
+      $event.dataTransfer.dropEffect = 'move'; // eslint-disable-line
+    },
+    handleDrop($event, datetime) {
+      const dataString = $event.dataTransfer.getData('kalendar/event');
+      const event = JSON.parse(dataString);
+
+      const { from, to } = this.options.event.label;
+      event[from] = new Date(event[from]);
+      event[to] = new Date(event[to]);
+      const hours = (event[to] - event[from]) / 3600000;
+
+      event[from].setMonth(datetime.getMonth());
+      event[from].setDate(datetime.getDate());
+      if (this.currentView !== 'monthly') {
+        event[from].setHours(datetime.getHours());
+      }
+      event[to] = Calendar.getOffsetDate(event[from], { hour: hours });
+      this.$emit('update:event', event);
     },
   },
 };
