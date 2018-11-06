@@ -101,23 +101,17 @@ export default {
       this.$emit('click:toolbar-date');
     },
     handleClickPrev() {
-      this.$emit('click:toolbar-prev');
-      if (this.options.toolbar) {
-        if (this.currentView === 'weekly') {
-          this.updateCurrentDate(Calendar.moveToPrevWeek(this.currentDate));
-        } else {
-          this.updateCurrentDate(Calendar.moveToPrevMonth(this.currentDate));
-        }
+      if (this.currentView === 'weekly') {
+        this.updateCurrentDate(Calendar.moveToPrevWeek(this.currentDate));
+      } else {
+        this.updateCurrentDate(Calendar.moveToPrevMonth(this.currentDate));
       }
     },
     handleClickNext() {
-      this.$emit('click:toolbar-next');
-      if (this.options.toolbar) {
-        if (this.currentView === 'weekly') {
-          this.updateCurrentDate(Calendar.moveToNextWeek(this.currentDate));
-        } else {
-          this.updateCurrentDate(Calendar.moveToNextMonth(this.currentDate));
-        }
+      if (this.currentView === 'weekly') {
+        this.updateCurrentDate(Calendar.moveToNextWeek(this.currentDate));
+      } else {
+        this.updateCurrentDate(Calendar.moveToNextMonth(this.currentDate));
       }
     },
     handleClickDatetime(datetime) {
@@ -126,11 +120,11 @@ export default {
     handleClickEvent(event) {
       this.$emit('click:event', event);
     },
-    updateCurrentDate(date) {
-      this.$emit('update:current-date', date);
-    },
     updateEvent(event) {
       this.$emit('update:event', event);
+    },
+    updateCurrentDate(date) {
+      this.$emit('update:current-date', date);
     },
     updateRange() {
       const dates = this.calendar[this.currentView];
